@@ -1,0 +1,38 @@
+name: Java Product Catalog CI
+
+on:
+  push:
+    paths:
+      - 'Didur/**'
+      - '.github/workflows/java-ci.yml'
+  pull_request:
+    paths:
+      - 'Didur/**'
+      - '.github/workflows/java-ci.yml'
+
+jobs:
+  test-java:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Didur
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Tests with Gradle
+        run: ./gradlew test
